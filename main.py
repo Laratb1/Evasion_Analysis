@@ -1,4 +1,5 @@
 import pandas as pd
+import math
 
 df = pd.read_csv(
     'Tabela_de_Notas_PETUFES01_-_Introcomp.csv',
@@ -7,12 +8,27 @@ df = pd.read_csv(
 #df.info()
 
 df = df.replace('-', 0)
-df = df.drop(columns=['Nome Completo', 'Num. Matricula', 'Email', 'Tipo', 'M02W01E03', 'M02W01E04', 'M02W01E01', 'M02W01E02', 'M01W02O01', 'M01W02O02', 'M01W03O01', 'M01W05O02', 'M01W05O01', 'M01W04O01', 'M01W04O02', 'M01W02O03'])
+df = df.drop(columns=['Nome Completo', 'Num. Matricula', 'Email', 'Tipo'])
 
-# df.info()
-col = df.shape[1]
+sum = 0
+rows_count = len(df.index) 
+average_dic = {}
 
-df.iloc[1: , :]
-for i in range(col):
-    total = df[i].sum()
-    print(total)
+for column in df:
+    for row in df[column]:
+        sum += float(row)
+    #print(f"Column: {column} average: {sum/rows_count}")
+    average_dic[column] = sum/rows_count
+    sum = 0
+
+working_average = math.fsum(average_dic.values()) / len(average_dic)
+
+print(f"Overall average of working: {working_average}")
+
+print("==============================================")
+print("Below average workings:")
+print("==============================================")
+for key, value in average_dic.items():
+   
+    if value <= working_average:
+        print(f"Working: {key} average: {value}")
